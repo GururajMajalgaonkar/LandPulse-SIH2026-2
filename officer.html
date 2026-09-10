@@ -1,0 +1,48 @@
+{% extends "base.html" %}{% block content %}
+<div class="hero">
+  <div>
+    <p class="eyebrow">OFFICER CONTROL PANEL</p>
+    <h1>Officer Portal</h1>
+    <p>Click any land parcel to view owner, area, compensation and acquisition details.</p>
+  </div>
+  <div class="live"><i></i> LIVE GIS</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><span>Total Parcels</span><b>{{stats.total}}</b></div>
+  <div class="stat danger"><span>High Risk</span><b>{{stats.high}}</b></div>
+  <div class="stat"><span>Payment Pending</span><b>{{stats.pending}}</b></div>
+  <div class="stat"><span>Compensation Paid</span><b>₹{{"{:,.0f}".format(stats.paid)}}</b></div>
+</div>
+
+<section class="card">
+  <div class="cardhead">
+    <div><h2>Interactive Land Parcel Map</h2><p>Click a parcel marker to open its complete case details.</p></div>
+    <span class="badge">OFFICER VIEW</span>
+  </div>
+  <div id="map"></div>
+</section>
+
+<section class="card" style="margin-top:20px">
+  <div class="cardhead">
+    <div><h2>Land Parcel Register</h2><p>Select “View Details” for owner and compensation information.</p></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Survey/Gat No.</th><th>Owner</th><th>Village</th><th>Area</th><th>Compensation</th><th>Payment</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for p in parcels %}
+      <tr>
+        <td><b>{{p.survey_no}}</b></td>
+        <td>{{p.owner_name}}</td>
+        <td>{{p.village}}</td>
+        <td>{{p.area}} ha</td>
+        <td>₹{{"{:,.0f}".format(p.compensation or 0)}}</td>
+        <td>{{p.payment_status}}</td>
+        <td><span class="status">{{p.status}}</span></td>
+        <td><a class="primary small" href="{{url_for('parcel',pid=p.id)}}">View Details →</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endblock %}

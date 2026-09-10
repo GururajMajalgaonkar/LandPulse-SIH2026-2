@@ -1,0 +1,6 @@
+
+{% extends "base.html" %}{% block content %}
+<div class="pagehead"><div><p class="eyebrow">PROJECT MANAGEMENT</p><h1>Acquisition Projects</h1><p>Create and monitor government acquisition projects.</p></div></div>
+<section class="card formcard"><h2>Create Project</h2><form method="post" class="formgrid"><div><label>Project name</label><input name="name" required></div><div><label>State</label><input name="state" value="Maharashtra" required></div><div><label>District</label><input name="district" required></div><div><label>Required area (ha)</label><input name="area" type="number" step="0.01" required></div><button class="primary">Create Project</button></form></section>
+<section class="card"><div class="cardhead"><h2>Projects</h2><span class="badge">{{projects|length}} records</span></div><div class="tablewrap"><table><thead><tr><th>Project</th><th>Location</th><th>Required Area</th><th>Status</th></tr></thead><tbody>{% for p in projects %}<tr><td><b>{{p.name}}</b></td><td>{{p.district}}, {{p.state}}</td><td>{{p.required_area}} ha</td><td><span class="status">{{p.status}}</span></td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

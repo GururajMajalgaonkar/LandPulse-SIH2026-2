@@ -1,0 +1,16 @@
+
+{% extends "base.html" %}{% block content %}
+<div class="hero"><div><p class="eyebrow">REAL-TIME NATIONAL MONITORING</p><h1>Land Acquisition Command Center</h1><p>Track projects, parcels, compensation, risks and possession from one source of truth.</p></div><div class="live"><i></i> LIVE</div></div>
+<div class="stats">
+<div class="stat"><span>Active Projects</span><b>{{stats.projects}}</b></div><div class="stat"><span>Tracked Parcels</span><b>{{stats.parcels}}</b></div><div class="stat"><span>Possession Complete</span><b>{{stats.acquired}}</b></div><div class="stat danger"><span>High Risk</span><b>{{stats.high_risk}}</b></div><div class="stat"><span>Compensation Paid</span><b>₹{{"{:,.0f}".format(stats.paid)}}</b></div>
+</div>
+<div class="grid2"><section class="card"><div class="cardhead"><div><h2>National GIS View</h2><p>Click a parcel for live status.</p></div><span class="badge">GIS</span></div><div id="map"></div></section>
+<section class="card"><div class="cardhead"><div><h2>Decision Support</h2><p>Priority cases requiring attention.</p></div></div>
+{% for p in parcels if p.risk=='High' %}<a class="riskrow" href="{{url_for('parcel',pid=p.id)}}"><div><b>{{p.survey_no}}</b><span>{{p.project_name}}</span></div><strong>HIGH RISK</strong><small>{{p.delay_reason or 'Risk detected'}}</small></a>{% else %}<div class="empty">No high-risk parcels.</div>{% endfor %}
+<div class="mini"><div><b>{{stats.pending}}</b><span>Cases not fully paid</span></div><div><b>{{stats.parcels-stats.acquired}}</b><span>Acquisition in progress</span></div></div>
+</section></div>
+<section class="card"><div class="cardhead"><div><h2>{% if role=='farmer' %}My Land Parcels{% else %}Recent Land Parcels{% endif %}</h2><p>End-to-end lifecycle status.</p></div>{% if role!='farmer' %}<a class="primary small" href="{{url_for('parcels')}}">Manage parcels</a>{% endif %}</div>
+<div class="tablewrap"><table><thead><tr><th>Survey No.</th><th>Project</th>{% if role!='farmer'%}<th>Owner</th>{% endif %}<th>Area</th><th>Status</th><th>Risk</th><th></th></tr></thead><tbody>
+{% for p in parcels %}<tr><td><b>{{p.survey_no}}</b></td><td>{{p.project_name}}</td>{% if role!='farmer'%}<td>{{p.owner_name}}</td>{% endif %}<td>{{p.area}} ha</td><td><span class="status">{{p.status}}</span></td><td><span class="risk {{p.risk|lower}}">{{p.risk}}</span></td><td><a href="{{url_for('parcel',pid=p.id)}}">Open →</a></td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}
